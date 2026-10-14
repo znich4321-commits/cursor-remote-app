@@ -32,13 +32,59 @@
   #title span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   #title::after { content: "▾"; color: #888; flex: none; }
   .seg { display: flex; flex: none; border: 1px solid #3c3c3c; border-radius: 8px; overflow: hidden; }
-  .seg button { border: none; border-radius: 0; padding: 5px 12px; background: #2d2d2d; }
+  .seg button { border: none; border-radius: 0; padding: 5px 10px; background: #2d2d2d; display: flex; align-items: center; gap: 5px; font-size: 13.5px; }
   .seg button.on { background: #0e639c; }
+  .seg .badge { font-size: 11px; line-height: 1; padding: 2px 5px; border-radius: 10px; background: #3a3d41; color: #ddd; font-weight: 600; }
+  .seg .badge.busy { background: #1177bb; color: #fff; animation: pulse 1.2s ease-in-out infinite; }
+  .seg button.on .badge { background: #fff3; color: #fff; }
   #menuBtn { flex: none; padding: 5px 10px; }
 
   main { flex: 1; min-height: 0; position: relative; }
   .view { position: absolute; inset: 0; display: none; flex-direction: column; min-width: 0; }
   .view.active { display: flex; }
+
+  /* current chat header inside chat view */
+  #curChatBar { flex: none; display: flex; align-items: center; gap: 6px; padding: 5px 10px; background: #222325; border-bottom: 1px solid #2e2e2e; min-width: 0; }
+  #curChatBtn { flex: 1; min-width: 0; display: flex; align-items: center; gap: 7px; background: #2b2d30; border: 1px solid #3a3d41; border-radius: 8px; padding: 5px 10px; text-align: left; font-size: 13px; color: #ddd; }
+  #curChatBtn .curDot { width: 8px; height: 8px; border-radius: 50%; background: #5a5a5a; flex: none; }
+  #curChatBtn .curDot.busy { background: #4af; animation: pulse 1.2s ease-in-out infinite; }
+  #curChatBtn .curDot.ok { background: #4ec9b0; }
+  #curChatName { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+  #curChatBtn .curHint { flex: none; font-size: 11.5px; color: #888; }
+  #curNewBtn { flex: none; padding: 5px 10px; font-size: 13px; }
+
+  /* chats list view */
+  .chatsBar { flex: none; display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: #252526; border-bottom: 1px solid #333; min-width: 0; }
+  .searchWrap { flex: 1; min-width: 0; position: relative; display: flex; align-items: center; }
+  #chatSearch { width: 100%; padding: 7px 28px 7px 10px; font-size: 14px; border-radius: 8px; background: #1e1e1e; border: 1px solid #3c3c3c; }
+  #chatSearchClear { position: absolute; right: 4px; background: none; border: none; color: #888; padding: 4px 6px; font-size: 15px; }
+  #chatsNew { flex: none; padding: 7px 12px; font-weight: 600; }
+  #chatsList { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 8px 10px 20px; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+  .chatSec { margin-bottom: 10px; }
+  .chatSecHead { width: 100%; display: flex; align-items: center; gap: 6px; background: none; border: none; padding: 6px 4px; color: #9da5b4; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; text-align: left; }
+  .chatSecHead .secCount { color: #666; font-weight: 400; margin-left: auto; }
+  .chatCard { display: flex; align-items: stretch; gap: 6px; background: #252526; border: 1px solid #323233; border-radius: 10px; margin-bottom: 6px; overflow: hidden; transition: border-color .15s, background .15s; }
+  .chatCard.cur { border-color: #1177bb; background: #1f2a36; }
+  .chatMain { flex: 1; min-width: 0; display: flex; align-items: center; gap: 9px; padding: 9px 10px; background: none; border: none; text-align: left; white-space: normal; }
+  .chatIcon { flex: none; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #73c991; }
+  .dotBusy { width: 9px; height: 9px; border-radius: 50%; background: #4af; animation: pulse 1.2s ease-in-out infinite; }
+  .dotUnread { width: 8px; height: 8px; border-radius: 50%; background: #e5c07b; }
+  .chatBody { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .chatTitleRow { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .chatTitle { flex: 1; min-width: 0; font-size: 14px; color: #e6e6e6; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .chatCard.cur .chatTitle { color: #fff; font-weight: 600; }
+  .chatTag { flex: none; font-size: 10.5px; padding: 1px 6px; border-radius: 4px; background: #0e639c; color: #fff; font-weight: 600; }
+  .chatTag.env { background: #3a3d41; color: #bbb; font-weight: 400; }
+  .chatMetaRow { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #8b949e; min-width: 0; }
+  .chatMetaRow .add { color: #73c991; font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; }
+  .chatMetaRow .del { color: #f14c4c; font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; }
+  .chatSub { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .chatSub.busy { color: #6cb6ff; }
+  .chatRight { flex: none; display: flex; align-items: center; gap: 4px; padding-right: 8px; }
+  .chatTime { font-size: 11.5px; color: #777; font-variant-numeric: tabular-nums; padding: 0 2px; }
+  .chatActBtn { background: #2d2d2d; border: 1px solid #3c3c3c; border-radius: 6px; padding: 4px 7px; font-size: 12px; color: #aaa; }
+  .chatMore { width: 100%; padding: 7px; font-size: 12.5px; color: #9cc8ff; background: #252526; border: 1px dashed #3c3c3c; border-radius: 8px; margin-bottom: 6px; }
+  .chatsEmpty { color: #888; text-align: center; padding: 40px 20px; line-height: 1.6; }
 
   /* chat view */
   #list { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 10px 12px 16px; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
@@ -197,6 +243,7 @@
   <span id="dot"></span>
   <button id="title"><span id="titleText">连接中…</span></button>
   <div class="seg">
+    <button id="tabChats">列表<span id="chatsBadge" class="badge" hidden></span></button>
     <button id="tabChat" class="on">对话</button>
     <button id="tabScreen">画面</button>
   </div>
@@ -204,7 +251,26 @@
 </header>
 
 <main>
+  <section id="chatsView" class="view">
+    <div class="chatsBar">
+      <div class="searchWrap">
+        <input id="chatSearch" type="search" placeholder="搜索对话…" autocapitalize="off" autocorrect="off" spellcheck="false">
+        <button id="chatSearchClear" hidden aria-label="清除">×</button>
+      </div>
+      <button id="chatsNew" class="primary">＋ 新建</button>
+    </div>
+    <div id="chatsList"></div>
+  </section>
+
   <section id="chatView" class="view active">
+    <div id="curChatBar" hidden>
+      <button id="curChatBtn">
+        <i id="curChatDot" class="curDot"></i>
+        <span id="curChatName"></span>
+        <span class="curHint">切换 ▾</span>
+      </button>
+      <button id="curNewBtn" title="新建对话">＋</button>
+    </div>
     <div id="list">
       <button id="older">↑ 加载更早的消息</button>
       <div id="items"></div>
@@ -561,6 +627,7 @@ function connect() {
       setTimeout(checkAppUpdate, 3000);
     }
     else if (m.t === 'chat') renderChat(m.chat);
+    else if (m.t === 'chats') renderChats(m.chats);
     else if (m.t === 'frame') onFrame(m);
     else if (m.t === 'panel') { panel = m.rect; layoutStage(); applyQuality(); }
     else if (m.t === 'windows') { windows = m.list; currentWindow = m.current; if (sheetKind === 'windows') showWindows(); }
@@ -610,11 +677,12 @@ const RISKY = /^(stop|reject|deny|undo|discard|revert|cancel|delete|remove|停�
 
 const KIND_TAG = { agents: 'Agents', ssh: 'SSH', local: '本地' };
 
-// Cursor titles look like "file.py — Folder [SSH: host]"; the window is identified by folder (+ host), not the open file.
+// Cursor titles look like "file.py — Folder [SSH: host] - Cursor"; the window is identified by folder (+ host), not the open file.
 function winLabel(title) {
   const host = /\[SSH: ([^\]]+)\]/.exec(title)?.[1];
-  const parts = title.replace(/\s*\[SSH: [^\]]+\]\s*$/, '').split(' — ').map(s => s.replace(/^●\s*/, '').trim());
-  const folder = parts.pop() || title;
+  const clean = (title || '').replace(/\s+[—-]\s+Cursor\s*$/i, '').replace(/\s*\[SSH: [^\]]+\]\s*$/, '');
+  const parts = clean.split(/\s+[—-]\s+/).map(s => s.replace(/^●\s*/, '').trim()).filter(Boolean);
+  const folder = parts.pop() || clean || title;
   return { name: host ? `${folder} · ${host}` : folder, file: parts.join(' — ') };
 }
 
@@ -697,7 +765,7 @@ function showMainMenu() {
       : standalone() ? '' : '<button class="opt" data-act="install"><span class="lbl">安装到手机桌面（像 App 一样打开）</span></button>'}
     <button class="opt" data-act="reconnect"><span class="lbl">重新连接</span></button>
     <button class="opt" data-act="voice"><span class="lbl">语音按钮<span class="sub">输入法键盘自带麦克风的话用不着</span></span><span class="switch ${store.get('voice') === 'on' ? 'on' : ''}"></span></button>
-    <button class="opt" data-act="lang"><span class="lbl">语言 / Language</span><span class="tag">${I18N.lang === 'en' ? 'English' : '中文'}</span></button>
+    <button class="opt" data-act="lang"><span class="lbl">语言 / Language</span><span class="tag">${I18N.lang === 'ru' ? 'Русский' : I18N.lang === 'en' ? 'English' : '中文'}</span></button>
     <button class="opt" data-act="devices"><span class="lbl">已配对设备</span></button>
     <button class="opt" data-act="logout"><span class="lbl">取消本机配对</span></button>
     ${donate ? '<button class="opt" data-act="donate"><span class="lbl">赞赏作者 ☕</span></button>' : ''}`);
@@ -872,8 +940,9 @@ $('sheet').addEventListener('click', async e => {
   else if (act === 'reconnect') { closeSheet(); ws?.close(); }
   else if (act === 'donate') showDonate();
   else if (act === 'lang') openSheet('lang', '<h3>语言 / Language</h3>'
-    + `<button class="opt ${I18N.lang === 'zh' ? 'cur' : ''}" data-act="setLang" data-v="zh"><span class="lbl">中文</span></button>`
-    + `<button class="opt ${I18N.lang === 'en' ? 'cur' : ''}" data-act="setLang" data-v="en"><span class="lbl">English</span></button>`);
+    + `<button class="opt ${I18N.lang === 'ru' ? 'cur' : ''}" data-act="setLang" data-v="ru"><span class="lbl">Русский</span></button>`
+    + `<button class="opt ${I18N.lang === 'en' ? 'cur' : ''}" data-act="setLang" data-v="en"><span class="lbl">English</span></button>`
+    + `<button class="opt ${I18N.lang === 'zh' ? 'cur' : ''}" data-act="setLang" data-v="zh"><span class="lbl">中文</span></button>`);
   else if (act === 'setLang') I18N.set(b.dataset.v);
   else if (act === 'voice') {
     store.set('voice', store.get('voice') === 'on' ? null : 'on');
@@ -896,18 +965,165 @@ $('sheet').addEventListener('click', async e => {
 
 /* ---------- mode switching ---------- */
 function setMode(m) {
+  if (m !== 'chats' && m !== 'chat' && m !== 'screen') m = 'chat';
   mode = m;
   store.set('mode', m);
+  $('tabChats').classList.toggle('on', m === 'chats');
   $('tabChat').classList.toggle('on', m === 'chat');
   $('tabScreen').classList.toggle('on', m === 'screen');
+  $('chatsView').classList.toggle('active', m === 'chats');
   $('chatView').classList.toggle('active', m === 'chat');
   $('screenView').classList.toggle('active', m === 'screen');
   $('chatTools').hidden = m !== 'chat';
-  if (authed) send({ t: 'mode', mode: m });
+  if (authed) {
+    send({ t: 'mode', mode: m });
+    if (m === 'chats') send({ t: 'chats' });
+  }
   if (m === 'screen') { layoutStage(); applyQuality(); }
 }
+$('tabChats').onclick = () => setMode('chats');
 $('tabChat').onclick = () => setMode('chat');
 $('tabScreen').onclick = () => setMode('screen');
+
+/* ---------- chats list view ---------- */
+let lastChats = null;
+let chatFilter = '';
+
+function renderChats(chats) {
+  lastChats = chats;
+  const sections = chats?.sections || [];
+  let total = 0, busyCount = 0, activeItem = null;
+  for (const s of sections) {
+    for (const it of s.items || []) {
+      if (!it.archived) total++;
+      if (it.busy) busyCount++;
+      if (it.selected && !activeItem) activeItem = it;
+    }
+  }
+  const activeTitle = activeItem?.title || (typeof chats?.active === 'string' ? chats.active : chats?.active?.title) || '';
+  const activeBusy = activeItem ? activeItem.busy : Boolean(lastChat?.busy);
+  $('curChatBar').hidden = !activeTitle;
+  if (activeTitle) {
+    $('curChatName').textContent = activeTitle;
+    $('curChatDot').className = 'curDot' + (activeBusy ? ' busy' : '');
+  }
+  const badge = $('chatsBadge');
+  badge.hidden = !total && !busyCount;
+  badge.textContent = busyCount ? `${busyCount}⚡` : String(total);
+
+  const box = $('chatsList');
+  if (!sections.length) {
+    box.innerHTML = `<div class="chatsEmpty"><div>暂无对话列表</div>`
+      + (chats?.canToggleSidebar ? `<button data-chat-act="toggleSidebar">在 Cursor 中展开侧边对话列表</button>` : '')
+      + `</div>`;
+    return;
+  }
+
+  const q = chatFilter.trim().toLowerCase();
+  const html = [];
+  for (const sec of sections) {
+    const allItems = sec.items || [];
+    const items = q
+      ? allItems.filter(it => (it.title || '').toLowerCase().includes(q) || (it.sub || '').toLowerCase().includes(q))
+      : allItems;
+    if (q && !items.length) continue;
+    const shut = sec.collapsed && !q;
+    const countTxt = shut ? '' : `${items.length}${sec.hasMore && !q ? '+' : ''}`;
+    const cards = items.map(it => {
+      const icon = it.busy
+        ? '<span class="dotBusy" title="运行中"></span>'
+        : it.unread
+          ? '<span class="dotUnread" title="未读"></span>'
+          : it.archived
+            ? '<span class="dotDone" title="已归档">📦</span>'
+            : '<span class="dotDone" title="已完成">✓</span>';
+      const envTag = it.env
+        ? `<span class="chatTag ${/cloud/i.test(it.env) ? 'cloud' : 'wt'}">${/cloud/i.test(it.env) ? '☁ Cloud' : '⎇ Worktree'}</span>`
+        : '';
+      const hasMeta = it.sub || it.add || it.del || envTag;
+      const meta = hasMeta
+        ? `<div class="chatMetaRow">${envTag}`
+          + (it.sub ? `<span class="chatSub ${it.busy ? 'busy' : ''}">${esc(it.sub)}</span>` : '')
+          + ((it.add || it.del) ? `<span class="chatDiff">${it.add ? `<span class="add">${esc(it.add)}</span>` : ''}${it.del ? `<span class="del">${esc(it.del)}</span>` : ''}</span>` : '')
+          + `</div>`
+        : '';
+      const pinned = sec.title === 'Pinned';
+      const acts = `<div class="chatActs">`
+        + (it.canPin ? `<button class="chatActBtn ${pinned ? 'pinned' : ''}" data-chat-act="pin" data-id="${esc(it.id)}" data-title="${esc(it.title)}" title="${pinned ? '取消置顶' : '置顶'}">📌</button>` : '')
+        + (it.canArchive ? `<button class="chatActBtn" data-chat-act="${it.archived ? 'restore' : 'archive'}" data-id="${esc(it.id)}" data-title="${esc(it.title)}" title="${it.archived ? '恢复' : '归档'}">${it.archived ? '↩' : '✕'}</button>` : '')
+        + `</div>`;
+      return `<div class="chatCard ${it.selected ? 'active' : ''}" data-chat-select="${esc(it.id)}" data-title="${esc(it.title)}">`
+        + `<div class="chatIcon">${icon}</div>`
+        + `<div class="chatMain"><div class="chatTitleRow"><span class="chatTitle">${esc(it.title)}</span></div>${meta}</div>`
+        + `<div class="chatRight">${it.time ? `<span class="chatTime">${esc(it.time)}</span>` : ''}${acts}</div>`
+        + `</div>`;
+    }).join('');
+    const moreBtn = (!shut && sec.hasMore && !q)
+      ? `<button class="chatMore" data-chat-act="more" data-id="${esc(sec.id)}">加载更多…</button>`
+      : '';
+    html.push(`<div class="chatSec">`
+      + `<button class="chatSecHead" data-chat-act="section" data-id="${esc(sec.id)}">`
+      + `<span class="chev ${shut ? 'shut' : ''}">▾</span>`
+      + `<span class="secName">${esc(sec.title)}</span>`
+      + `<span class="secCount">${esc(countTxt)}</span>`
+      + `</button>`
+      + `<div class="chatSecBody" ${shut ? 'hidden' : ''}>${cards}${moreBtn}</div>`
+      + `</div>`);
+  }
+  if (!html.length) {
+    html.push(`<div class="chatsEmpty"><div>没有匹配的对话</div></div>`);
+  } else if (chats?.source === 'tabs' && chats?.canToggleSidebar) {
+    html.push(`<button class="chatMore" data-chat-act="toggleSidebar">在 Cursor 中展开完整侧边对话列表</button>`);
+  }
+  box.innerHTML = html.join('');
+}
+
+$('chatSearch').oninput = e => {
+  chatFilter = e.target.value;
+  $('chatSearchClear').hidden = !chatFilter;
+  if (lastChats) renderChats(lastChats);
+};
+$('chatSearchClear').onclick = () => {
+  $('chatSearch').value = '';
+  chatFilter = '';
+  $('chatSearchClear').hidden = true;
+  if (lastChats) renderChats(lastChats);
+};
+$('chatsNew').onclick = () => {
+  send({ t: 'newChat' });
+  status('已新建对话');
+  setMode('chat');
+};
+$('curChatBtn').onclick = () => setMode('chats');
+$('curNewBtn').onclick = () => {
+  send({ t: 'newChat' });
+  status('已新建对话');
+};
+$('chatsList').onclick = async e => {
+  const actBtn = e.target.closest('[data-chat-act]');
+  if (actBtn) {
+    e.stopPropagation();
+    const act = actBtn.dataset.chatAct;
+    const id = actBtn.dataset.id || '';
+    const title = actBtn.dataset.title || '';
+    if (act === 'archive' && !await ask(`归档对话「${title}」？`, '归档')) return;
+    send({ t: 'chatAction', act, id, title });
+    if (act === 'pin') status('已切换置顶');
+    else if (act === 'archive') status('已归档对话');
+    else if (act === 'restore') status('已恢复对话');
+    else if (act === 'more') status('正在加载更多对话…');
+    else if (act === 'toggleSidebar') status('正在展开对话列表…');
+    return;
+  }
+  const card = e.target.closest('[data-chat-select]');
+  if (card) {
+    const id = card.dataset.chatSelect;
+    const title = card.dataset.title || '';
+    send({ t: 'chatAction', act: 'select', id, title });
+    status('切换对话：' + title);
+    setMode('chat');
+  }
+};
 
 /* ---------- chat view ---------- */
 const list = $('list'), itemsEl = $('items');
@@ -1097,7 +1313,7 @@ document.addEventListener('click', async e => {
 
 $('pickMode').onclick = () => { status('读取模式列表…'); send({ t: 'openMenu', kind: 'mode' }); };
 $('pickModel').onclick = () => { status('读取模型列表…'); send({ t: 'openMenu', kind: 'model' }); };
-$('pickHistory').onclick = () => { status('读取历史对话…'); send({ t: 'openMenu', kind: 'history' }); };
+$('pickHistory').onclick = () => setMode('chats');
 $('newChat').onclick = () => { send({ t: 'newChat' }); status('已新建对话'); };
 
 /* ---------- file viewer ---------- */
