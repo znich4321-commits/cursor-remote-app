@@ -85,6 +85,7 @@ async function api(path, { method = 'GET', body, timeout = 30000, signal } = {})
   try {
     res = await fetch(base + path, { method, headers, body: body !== undefined ? JSON.stringify(body) : undefined, signal: ctl.signal, cache: 'no-store' });
   } catch {
+    if (signal?.aborted) throw Object.assign(new Error('Отменено'), { aborted: true });
     markNet(false);
     throw Object.assign(new Error('Нет связи с компьютером'), { net: true });
   } finally { clearTimeout(t); }
@@ -206,39 +207,35 @@ function updateDot() {
 
 /* ================= поток событий ================= */
 
+// События приходят long-poll запросами /br/poll: бесплатный туннель Cloudflare не отдаёт SSE потоком (буферизует до конца ответа).
+// Номер последнего события помним между перезапусками цикла, поэтому при возврате из фона ничего не теряется;
+// если мост перезапускался или разрыв слишком большой, он отвечает reset - тогда обновляем экран целиком.
+let pollSince = null;
 async function startEvents() {
   evCtl?.abort();
   const ctl = new AbortController();
   evCtl = ctl;
-  let backoff = 800;
+  let backoff = 800, firstOk = true;
   while (!ctl.signal.aborted && authed) {
-    let lastData = Date.now();
-    const wd = setInterval(() => { if (Date.now() - lastData > 40000) ctl.abort(); }, 5000);
     try {
-      const res = await fetch(base + '/api/event', { headers: { authorization: 'Bearer ' + store.get('token') }, signal: ctl.signal, cache: 'no-store' });
-      if (res.status === 401) { boot(); return; }
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      S.live = true; backoff = 800; updateDot();
-      const dec = new TextDecoder();
-      let buf = '';
-      for await (const chunk of res.body) {
-        lastData = Date.now();
-        buf += dec.decode(chunk, { stream: true });
-        let i;
-        while ((i = buf.indexOf('\n\n')) >= 0) {
-          const raw = buf.slice(0, i); buf = buf.slice(i + 2);
-          const data = raw.split('\n').filter(l => l.startsWith('data:')).map(l => l.slice(5).trim()).join('');
-          if (!data) continue;
-          try { onEvent(JSON.parse(data)); } catch (e) { console.warn('event', e); }
-        }
-      }
-    } catch (e) { if (ctl.signal.aborted && evCtl !== ctl) return; }
-    clearInterval(wd);
-    S.live = false; updateDot();
-    if (ctl.signal.aborted && evCtl !== ctl) return;
-    await sleep(backoff); backoff = Math.min(backoff * 1.7, 8000);
-    if (authed && S.cur) scheduleTail(true);
-    if (authed) refreshAll();
+      const r = await api(`/br/poll?wait=20${pollSince == null ? '' : '&since=' + pollSince}`, { timeout: 45000, signal: ctl.signal });
+      if (ctl.signal.aborted) return;
+      const wasLive = S.live;
+      S.live = true; backoff = 800;
+      if (S.up !== (r.up !== false)) { S.up = r.up !== false; if (S.up) refreshAll(); }
+      updateDot();
+      if (r.reset) { pollSince = r.seq; if (!firstOk) refreshAll(); firstOk = false; continue; }
+      firstOk = false;
+      pollSince = r.seq;
+      if (!wasLive && S.cur) scheduleTail(true);
+      for (const ev of r.events || []) { try { onEvent(ev); } catch (e) { console.warn('event', e); } }
+    } catch (e) {
+      if (ctl.signal.aborted || e.aborted) { if (evCtl !== ctl) return; }
+      if (e.auth) return;
+      S.live = false; updateDot();
+      await sleep(backoff); backoff = Math.min(backoff * 1.7, 8000);
+      if (evCtl !== ctl) return;
+    }
   }
 }
 
