@@ -373,7 +373,7 @@ $('#search').oninput = e => { clearTimeout(searchTimer); searchTimer = setTimeou
 /* ================= окна (bottom sheet) ================= */
 
 function sheet(title, build, { full = false } = {}) {
-  const back = h('div', { class: 'back', onclick: e => { if (e.target === back) close(); } });
+  const back = h('div', { class: 'back', role: 'presentation', onclick: e => { if (e.target === back) close(); } });
   const body = h('div', { class: 'body' });
   const titleEl = h('div', { class: 't' }, title);
   const box = h('div', { class: 'sheet' + (full ? ' full' : '') }, h('header', {}, titleEl, h('button', { class: 'ico', onclick: () => close(), 'aria-label': 'Закрыть' }, '✕')), body);
