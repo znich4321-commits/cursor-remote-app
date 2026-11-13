@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' https://*.trycloudflare.com http://127.0.0.1:* http://localhost:*; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="theme-color" content="#0e0f12">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="OpenCode">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+<title>OpenCode Remote</title>
+</head>
+<body>
+<div id="app">
+
+  <!-- Список чатов -->
+  <section id="list-view" class="view">
+    <header class="bar">
+      <div class="brand"><span id="dot" class="dot"></span><span class="brand-t">OpenCode</span></div>
+      <div class="spacer"></div>
+      <button id="btn-refresh" class="ico" title="Обновить" aria-label="Обновить">⟳</button>
+      <button id="btn-new" class="ico accent" title="Новый чат" aria-label="Новый чат">＋</button>
+      <button id="btn-settings" class="ico" title="Настройки" aria-label="Настройки">⚙</button>
+    </header>
+    <div class="searchrow">
+      <input id="search" type="search" placeholder="Поиск по чатам" autocomplete="off" enterkeyhint="search">
+      <button id="btn-archived" class="chip" title="Показать архив">Архив</button>
+    </div>
+    <div id="projects" class="chips"></div>
+    <div id="sessions" class="scroll"></div>
+  </section>
+
+  <!-- Чат -->
+  <section id="chat-view" class="view hidden">
+    <header class="bar">
+      <button id="btn-back" class="ico" aria-label="Назад">←</button>
+      <div class="titlebox" id="titlebox">
+        <div id="chat-title" class="title">…</div>
+        <div id="chat-sub" class="sub"></div>
+      </div>
+      <button id="btn-stop" class="ico danger hidden" title="Остановить" aria-label="Остановить">■</button>
+      <button id="btn-menu" class="ico" title="Меню" aria-label="Меню">⋯</button>
+    </header>
+    <div id="statusbar" class="statusbar hidden"></div>
+    <div id="msgs" class="scroll msgs"></div>
+    <button id="btn-bottom" class="fab-down hidden" aria-label="Вниз">↓</button>
+    <div id="dock"></div>
+    <div id="composer" class="composer">
+      <div id="attachments" class="attachments hidden"></div>
+      <div id="slash" class="slash hidden"></div>
+      <div class="cwrap">
+        <button id="btn-attach" class="ico" aria-label="Прикрепить" title="Прикрепить файл или фото">📎</button>
+        <textarea id="inp" rows="1" placeholder="Сообщение агенту…" enterkeyhint="enter" autocomplete="off"></textarea>
+        <button id="btn-mic" class="ico" aria-label="Голосовой ввод" title="Голосовой ввод">🎤</button>
+        <button id="btn-send" class="send" aria-label="Отправить" title="Отправить">➤</button>
+      </div>
+      <div id="quick" class="quick"></div>
+      <input id="file" type="file" multiple hidden accept="image/*,application/pdf,text/*,.md,.json,.csv,.log,.py,.js,.ts,.mjs,.yml,.yaml,.toml,.xml,.html,.css,.sql,.ps1,.sh">
+    </div>
+  </section>
+
+  <div id="toasts"></div>
+  <div id="sheet-root"></div>
+
+  <!-- Экран привязки / ожидания -->
+  <div id="gate" class="gate">
+    <div class="gate-box">
+      <div class="logo">⌁</div>
+      <h1>OpenCode Remote</h1>
+      <p id="gateMsg"></p>
+      <input id="gateInput" hidden autocomplete="off">
+      <button id="gateBtn" class="primary" hidden></button>
+      <button id="gateRetry" class="ghost" hidden>Повторить</button>
+      <div id="gateInfo" class="muted"></div>
+    </div>
+  </div>
+</div>
+<script src="util.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
