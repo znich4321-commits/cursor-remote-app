@@ -17,6 +17,11 @@ function h(tag, attrs, ...kids) {
     else if (v === true) el.setAttribute(k, '');
     else el.setAttribute(k, v);
   }
+  // Нажимаемые «не кнопки» (строки списка, карточки) получают роль кнопки и работают с клавиатуры / программы чтения экрана.
+  if (typeof attrs?.onclick === 'function' && !/^(button|a|input|select|textarea|summary|label)$/.test(tag) && !el.hasAttribute('role')) {
+    el.setAttribute('role', 'button'); el.tabIndex = 0;
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } });
+  }
   for (const kid of kids.flat()) if (kid != null && kid !== false) el.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
   return el;
 }
