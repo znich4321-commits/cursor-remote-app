@@ -1,5 +1,5 @@
 /* Сервис-воркер пульта: офлайн-оболочка и push-уведомления. */
-const CACHE = 'ocr-v1';
+const CACHE = 'ocr-v2';
 const SHELL = ['./', 'index.html', 'style.css', 'util.js', 'app.js', 'manifest.webmanifest', 'icon.svg', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -15,7 +15,8 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   if (req.method !== 'GET' || url.origin !== location.origin) return;
   if (/\/(url\.json|br\/|api\/|admin\/)/.test(url.pathname)) return;
-  e.respondWith(fetch(req).then(res => {
+  // no-cache: GitHub Pages отдаёт файлы с max-age=600 - без повторной проверки телефон видел бы старую версию до 10 минут
+  e.respondWith(fetch(req, { cache: 'no-cache' }).then(res => {
     if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(req, copy)); }
     return res;
   }).catch(() => caches.match(req).then(r => r || caches.match('index.html'))));
