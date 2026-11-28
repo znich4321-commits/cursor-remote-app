@@ -312,7 +312,7 @@ async function loadSessions(append = false) {
   const p = new URLSearchParams({ limit: '40', order: 'desc', parentID: 'null', archived: S.archived ? 'true' : 'false' });
   if (S.q) p.set('search', S.q);
   if (S.dir) p.set('directory', S.dir);
-  if (append && S.next) p.set('cursor', S.next);
+  if (append && S.next) { p.delete('order'); p.set('cursor', S.next); }
   try {
     const [r, act] = await Promise.all([api('/api/session?' + p), api('/api/session/active').catch(() => ({ data: S.active }))]);
     S.active = act.data || {};
@@ -480,7 +480,7 @@ async function loadOlder() {
   const c = S.cur; if (!c?.older) return;
   const box = $('#msgs');
   const prevH = box.scrollHeight;
-  const r = await api(`/api/session/${c.id}/message?limit=30&order=desc&cursor=${encodeURIComponent(c.older)}`);
+  const r = await api(`/api/session/${c.id}/message?limit=30&cursor=${encodeURIComponent(c.older)}`);
   if (S.cur !== c) return;
   c.older = r.cursor?.next || null;
   mergeMessages((r.data || []).slice().reverse(), { keepScroll: true });
