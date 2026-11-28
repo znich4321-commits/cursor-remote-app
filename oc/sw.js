@@ -1,5 +1,5 @@
 /* Сервис-воркер пульта: офлайн-оболочка и push-уведомления. */
-const CACHE = 'ocr-v2';
+const CACHE = 'ocr-v3';
 const SHELL = ['./', 'index.html', 'style.css', 'util.js', 'app.js', 'manifest.webmanifest', 'icon.svg', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
